@@ -1,0 +1,27 @@
+{
+  "name": "magepow/sitemap",
+  "description": "Site Map magento2",
+  "require": {
+    "magepow/core": "^1.0.0"
+  },
+  "type": "magento2-module",
+  "license": [
+    "MIT"
+  ],
+  "authors": [
+    {
+      "name": "Magepow",
+      "email": "support@magepow.com",
+      "homepage": "https://www.magepow.com",
+      "role": "Technical Support"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Magepow\\Sitemap\\": ""
+    },
+    "files": [
+      "registration.php"
+    ]
+  }
+}

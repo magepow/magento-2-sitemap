@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="magepow" translate="label" sortOrder="1">
+            <label>Magepow</label>
+        </tab>
+        <section id="magepow_sitemap" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Sitemap</label>
+            <tab>magepow</tab>
+            <resource>Magepow_Sitemap::sitemap</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <label>General Settings</label>
+                <field id="enabled" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>HTML Sitemap</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Default URL: http://your-domain.com/sitemap/]]></comment>
+                </field>
+                <field id="category" translate="label" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Categories Sitemap</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Yes/No to show or hide the category list in HTML Sietmap]]></comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="product" translate="label" type="select" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Products Sitemap</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Yes/No to show or hide the product list in HTML Sietmap]]></comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="product_limit" translate="label comment" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Limit Product Sitemap</label>
+                    <validate>validate-digits validate-not-negative-number</validate>
+                    <comment><![CDATA[Show the product number to be displayed according to the settings. Default is 100]]></comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                        <field id="product">1</field>
+                    </depends>
+                </field>
+                <field id="page" translate="label" type="select" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Pages Sitemap</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Yes/No to show or hide the cms page list in HTML Sietmap]]></comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="enable_add_links" translate="label" type="select" sortOrder="550" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Additional Links</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Choose yes to show text add the link HTML site you want in the HTML sitemap.]]></comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="additional_links" translate="label" type="textarea" sortOrder="555" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Additional Links</label>
+                    <comment>
+                        <![CDATA[
+                          - A comma-delimited list of links and link labels to append to sitemap.</br>
+                          - One link per line.</br>
+                         <b>Example:</b></br>
+                         <div style="margin-left: 30px; font-size: 12px">
+                            http://www.magepow.com/,Magepow</br>
+                            https://magento.com/,Magento
+                         </div>
+                         ]]>
+                    </comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                        <field id="enable_add_links">1</field>
+                    </depends>
+                </field>
+                <field id="footer" translate="label" type="select" sortOrder="600" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Add Sitemap Link to Footer</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                     <comment><![CDATA[Choose yes to show link html sitemap on footer website.]]></comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+             <group id="xml_sitemap" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <label>XML Sitemap</label>
+                <field id="enable_add_link" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Additional Links</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Yes, if you want to add more custom links into sitemap XML file.</comment>
+                </field>
+                <field id="additional_links" translate="label comment" type="textarea" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Additional Links</label>
+                    <depends>
+                        <field id="enable_add_link">1</field>
+                    </depends>
+                    <comment>One link per line.</comment>
+                </field>
+                <field id="frequency" translate="label comment" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Frequency</label>
+                    <source_model>Magento\Sitemap\Model\Config\Source\Frequency</source_model>
+                    <depends>
+                        <field id="enable_add_link">1</field>
+                    </depends>
+                    <comment><![CDATA[One of the following value: <i>always, hourly, daily, weekly, monthly, yearly, never</i>. <a href="https://www.sitemaps.org/protocol.html" target="_blank">Learn more.</a>]]></comment>
+                </field>
+                <field id="priority" translate="label comment" type="text" sortOrder="23" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Priority</label>
+                    <validate>validate-number validate-digits-range digits-range-0-1</validate>
+                    <depends>
+                        <field id="enable_add_link">1</field>
+                    </depends>
+                    <comment><![CDATA[From 0 to 1. E.g: 0.5 or 0.8]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

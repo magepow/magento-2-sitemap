@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <magepow_sitemap>
+            <general>
+                <enabled>1</enabled>
+            </general>
+            <xml_sitemap>
+                <homepage_optimization>1</homepage_optimization>
+                <frequency>daily</frequency>
+            </xml_sitemap>
+        </magepow_sitemap>
+    </default>
+</config>
