@@ -4,10 +4,18 @@
         <magepow_sitemap>
             <general>
                 <enabled>1</enabled>
+                <category>1</category>
+                <product>1</product>
+                <product_limit>100</product_limit>
+                <page>1</page>
+                <enable_add_links>1</enable_add_links>
+                <footer>1</footer>
             </general>
             <xml_sitemap>
+                <enable_add_link>1</enable_add_link>
                 <homepage_optimization>1</homepage_optimization>
                 <frequency>daily</frequency>
+                <priority>0.5</priority>
             </xml_sitemap>
         </magepow_sitemap>
     </default>
