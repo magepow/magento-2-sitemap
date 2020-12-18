@@ -8,21 +8,18 @@ namespace Magepow\Sitemap\Block;
  */
 class Sitemap extends \Magento\Framework\View\Element\Template
 {
-
     /**
      * @var Category
      */
     protected $_categoryHelper;
-
+    /**
+     * @var CatalogFactory
+     */
+    protected $_categoryFactory;
     /**
      * @var CollectionFactory
      */
     protected $_categoryCollection;
-
-    /**
-     * @var CategoryRepository
-     */
-    protected $categoryRepository;
 
     /**
      * @var HelperConfig
@@ -47,7 +44,7 @@ class Sitemap extends \Magento\Framework\View\Element\Template
     /**
      * @type StoreManagerInterface
      */
-    protected $storeManager;
+    protected $_storeManager;
 
     /**
      * Sitemap constructor.
@@ -56,7 +53,6 @@ class Sitemap extends \Magento\Framework\View\Element\Template
      * @param Category $categoryHelper
 
      * @param CollectionFactory $categoryCollection
-     * @param CategoryRepository $categoryRepository
      * @param HelperConfig $helper
      * @param ProductCollection $productCollection
 
@@ -65,21 +61,26 @@ class Sitemap extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Helper\Category $categoryHelper,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollection,
-        \Magento\Catalog\Model\CategoryRepository $categoryRepository,
         \Magepow\Sitemap\Helper\Data $helper,
         \Magento\CatalogInventory\Helper\Stock $stockFilter,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection,
-        \Magento\Cms\Model\PageFactory $pageFactory
+        \Magento\Cms\Model\PageFactory $pageFactory,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\Config\Source\Category $category
     ) {
         $this->_categoryHelper     = $categoryHelper;
         $this->_categoryCollection = $categoryCollection;
-        $this->categoryRepository  = $categoryRepository;
         $this->_helper             = $helper;
         $this->productCollection   = $productCollection;
         $this->_stockFilter        = $stockFilter;
         $this->productVisibility   = $productVisibility;
         $this->pageFactory         = $pageFactory;
+        $this->_storeManager       = $storeManager;
+        $this->_categoryFactory    = $categoryFactory;
+
+        $this->_category = $category;
 
         parent::__construct($context);
     }
@@ -130,16 +131,23 @@ class Sitemap extends \Magento\Framework\View\Element\Template
      * @return \Magento\Framework\Data\Tree\Node\Collection
      */
     public function getCategoryCollection()
+    {   
+        return $this->_categoryHelper->getStoreCategories();
+    }
+    /**
+     * [getExcludeCategories]
+     * @return mixed
+     */
+    public function getExcludeCategories()
     {
         $collection = $this->_categoryCollection->create();
-        $collection->addAttributeToSelect('*');
-        $collection->addFieldToFilter('xml_sitemap_exclude', [
-                ['null' => true],
-                ['eq' => ''],
-                ['eq' => 'NO FIELD'],
-                ['eq' => '0'],
-            ]);
-        return $collection;
+        $collection->addAttributeToSelect('*')
+                    ->addFieldToFilter('xml_sitemap_exclude',1);
+        $categoriesId =[];
+        foreach ($collection as $category) {
+            $categoriesId[] = $category->getId();
+        }
+        return $categoriesId;
     }
 
     /**
@@ -150,7 +158,7 @@ class Sitemap extends \Magento\Framework\View\Element\Template
      */
     public function getCategoryUrl($categoryId)
     {
-        return $this->_categoryHelper->getCategoryUrl($this->categoryRepository->get($categoryId));
+        return $this->_categoryHelper->getCategoryUrl($categoryId);
     }
 
     /**
@@ -203,6 +211,47 @@ class Sitemap extends \Magento\Framework\View\Element\Template
         return '<li><a href="' . $link . '">' . __($title) . '</a></li>';
     }
 
+    public function getAllCategories()
+    {   
+        $categoryHtmlEnd = null;
+        $excludeCategory = $this->getExcludeCategories();
+        $_categories = $this->getCategoryCollection();
+        if($_categories){
+            foreach ($_categories as $category) {
+                if (!$category->getIsActive() || (in_array($category->getId(), $excludeCategory))) {
+                    continue;
+                }
+                $categoryHtmlEnd .= $this->renderLinkElement($this->getCategoryUrl($category), $category->getName());
+                if ($category->hasChildren()) {
+                   $categoryHtmlEnd .= $this->getChildrenCategory($category->getChildren(), $excludeCategory);
+                }
+                $categoryHtmlEnd .= '</li>';
+            }
+        }        
+        return $categoryHtmlEnd;
+    }
+    protected function getChildrenCategory($categories, $excludeCategory)
+    {   
+        $categoryHtml = null;
+        if (is_array($categories) || is_object($categories)){
+
+            $categoryHtml .='<ul>';
+            foreach ($categories as $category) {
+                if (!$category->getIsActive() || (in_array($category->getId(), $excludeCategory))) {
+                    continue;
+                }
+                    $categoryHtml .= $this->renderLinkElement($this->getCategoryUrl($category), $category->getName());
+                    if ($category->hasChildren()){
+                    $categoryHtml .= $this->getChildrenCategory($category->getChildren(), $excludeCategory);
+
+                    }
+                    $categoryHtml .= '</li>';
+                }
+            $categoryHtml .='</ul>';
+        }
+        return $categoryHtml;
+    }
+
     /**
      * @param $section
      * @param $title
@@ -213,15 +262,13 @@ class Sitemap extends \Magento\Framework\View\Element\Template
      */
     public function renderSection($section,$title, $collection)
     {
-        $html = '<div class="row">';
+        $html = '';
+        $html .= '<div class="sitemap-listing">';
         $html .= '<h2>' . __($title) . '</h2>';
         if ($collection) {
-            $html .= '<ul class="sitemap-listing">';
+            $html .= '<ul>';
             foreach ($collection as $key => $item) {
-                switch ($section) {
-                    case 'category':
-                        $html .= $this->renderLinkElement($this->getCategoryUrl($item->getId()), $item->getName());
-                        break;
+                switch ($section) {    
                     case 'page':
                         $html .= $this->renderLinkElement($this->getUrl($item->getIdentifier()), $item->getTitle());
                         break;
@@ -230,13 +277,12 @@ class Sitemap extends \Magento\Framework\View\Element\Template
                         break;
                     case 'link':
                         $html .= $this->renderLinkElement($key, $item);
-                        break;
+                        break; 
                 }
             }
             $html .= '</ul>';
         }
         $html .= '</div>';
-
         return $html;
     }
 
@@ -247,13 +293,12 @@ class Sitemap extends \Magento\Framework\View\Element\Template
     public function getHtmlSitemap()
     {
         $htmlSitemap = '';
+        $htmlSitemap .= '<div class="sitemap-listing">';
         if($this->getConfig('general/category')){
-            $htmlSitemap .= $this->renderSection(
-                'category',
-                'Categories list',
-                $this->getCategoryCollection()
-            );            
+            $htmlSitemap .= '<h2>' . 'Categories list' . '</h2>';
+            $htmlSitemap .= '<ul>'.$this->getAllCategories().'</ul>';           
         }
+        $htmlSitemap .= '</div>';
 
         if($this->getConfig('general/page')){
             $htmlSitemap .= $this->renderSection(
