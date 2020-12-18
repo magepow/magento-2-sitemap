@@ -266,22 +266,29 @@ class Sitemap extends \Magento\Framework\View\Element\Template
         $html .= '<div class="sitemap-listing">';
         $html .= '<h2>' . __($title) . '</h2>';
         if ($collection) {
-            $html .= '<ul>';
-            foreach ($collection as $key => $item) {
-                switch ($section) {    
+            $html .= '<ul>';        
+                switch ($section) { 
+                    case 'category':
+                        $html .= $this->getTreeCategories();
+                        break; 
                     case 'page':
-                        $html .= $this->renderLinkElement($this->getUrl($item->getIdentifier()), $item->getTitle());
+                        foreach ($collection as $key => $item) {
+                            $html .= $this->renderLinkElement($this->getUrl($item->getIdentifier()), $item->getTitle());
+                        }
                         break;
                     case 'product':
-                        $html .= $this->renderLinkElement($this->getUrl($item->getProductUrl()), $item->getName());
+                        foreach ($collection as $key => $item) {
+                             $html .= $this->renderLinkElement($this->getUrl($item->getProductUrl()), $item->getName());
+                        }
                         break;
                     case 'link':
-                        $html .= $this->renderLinkElement($key, $item);
-                        break; 
+                        foreach ($collection as $key => $item) {
+                            $html .= $this->renderLinkElement($key, $item);
+                        }
+                        break;
                 }
             }
             $html .= '</ul>';
-        }
         $html .= '</div>';
         return $html;
     }
@@ -293,12 +300,13 @@ class Sitemap extends \Magento\Framework\View\Element\Template
     public function getHtmlSitemap()
     {
         $htmlSitemap = '';
-        $htmlSitemap .= '<div class="sitemap-listing">';
         if($this->getConfig('general/category')){
-            $htmlSitemap .= '<h2>' . 'Categories list' . '</h2>';
-            $htmlSitemap .= '<ul>'.$this->getTreeCategories().'</ul>';           
+            $htmlSitemap .= $this->renderSection(
+                'category',
+                'Category list',
+                true
+            );            
         }
-        $htmlSitemap .= '</div>';
 
         if($this->getConfig('general/page')){
             $htmlSitemap .= $this->renderSection(
