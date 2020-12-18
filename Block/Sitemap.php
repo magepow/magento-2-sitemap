@@ -211,7 +211,7 @@ class Sitemap extends \Magento\Framework\View\Element\Template
         return '<li><a href="' . $link . '">' . __($title) . '</a></li>';
     }
 
-    public function getAllCategories()
+    public function getTreeCategories()
     {   
         $categoryHtmlEnd = null;
         $excludeCategory = $this->getExcludeCategories();
@@ -223,14 +223,14 @@ class Sitemap extends \Magento\Framework\View\Element\Template
                 }
                 $categoryHtmlEnd .= $this->renderLinkElement($this->getCategoryUrl($category), $category->getName());
                 if ($category->hasChildren()) {
-                   $categoryHtmlEnd .= $this->getChildrenCategory($category->getChildren(), $excludeCategory);
+                   $categoryHtmlEnd .= $this->getCategories($category->getChildren(), $excludeCategory);
                 }
                 $categoryHtmlEnd .= '</li>';
             }
         }        
         return $categoryHtmlEnd;
     }
-    protected function getChildrenCategory($categories, $excludeCategory)
+    protected function getCategories($categories, $excludeCategory)
     {   
         $categoryHtml = null;
         if (is_array($categories) || is_object($categories)){
@@ -242,7 +242,7 @@ class Sitemap extends \Magento\Framework\View\Element\Template
                 }
                     $categoryHtml .= $this->renderLinkElement($this->getCategoryUrl($category), $category->getName());
                     if ($category->hasChildren()){
-                    $categoryHtml .= $this->getChildrenCategory($category->getChildren(), $excludeCategory);
+                    $categoryHtml .= $this->getCategories($category->getChildren(), $excludeCategory);
 
                     }
                     $categoryHtml .= '</li>';
@@ -296,7 +296,7 @@ class Sitemap extends \Magento\Framework\View\Element\Template
         $htmlSitemap .= '<div class="sitemap-listing">';
         if($this->getConfig('general/category')){
             $htmlSitemap .= '<h2>' . 'Categories list' . '</h2>';
-            $htmlSitemap .= '<ul>'.$this->getAllCategories().'</ul>';           
+            $htmlSitemap .= '<ul>'.$this->getTreeCategories().'</ul>';           
         }
         $htmlSitemap .= '</div>';
 
