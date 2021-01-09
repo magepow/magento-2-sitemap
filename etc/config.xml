@@ -13,6 +13,7 @@
             </general>
             <xml_sitemap>
                 <enable_add_link>1</enable_add_link>
+                <exclusion_child_category>1</exclusion_child_category>
                 <homepage_optimization>1</homepage_optimization>
                 <frequency>daily</frequency>
                 <priority>0.5</priority>
