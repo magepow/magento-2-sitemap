@@ -1,5 +1,5 @@
 <?php
-namespace Magepow\Sitemapexclusion\Model\ItemProvider;
+namespace Magepow\Sitemap\Model\ItemProvider;
 
 use Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
