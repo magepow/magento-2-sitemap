@@ -9,7 +9,6 @@
                 <product_limit>100</product_limit>
                 <page>1</page>
                 <enable_add_links>1</enable_add_links>
-                <footer>1</footer>
             </general>
             <xml_sitemap>
                 <enable_add_link>1</enable_add_link>
