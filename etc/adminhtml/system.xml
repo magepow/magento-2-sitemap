@@ -75,14 +75,6 @@
                         <field id="enable_add_links">1</field>
                     </depends>
                 </field>
-                <field id="footer" translate="label" type="select" sortOrder="600" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Add Sitemap Link to Footer</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                     <comment><![CDATA[Choose yes to show link html sitemap on footer website.]]></comment>
-                    <depends>
-                        <field id="enabled">1</field>
-                    </depends>
-                </field>
             </group>
              <group id="xml_sitemap" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                 <label>XML Sitemap</label>
