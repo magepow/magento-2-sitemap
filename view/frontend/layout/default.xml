@@ -4,7 +4,7 @@
     <body>
         <referenceBlock name="footer_links">
             <block class="Magento\Framework\View\Element\Html\Link\Current" name="magepow_sitemap_footer"
-                   ifconfig="magepow_sitemap/general/footer">
+                   ifconfig="magepow_sitemap/general/enabled">
                 <arguments>
                     <argument name="label" xsi:type="string" translate="true">HTML Sitemap</argument>
                     <argument name="path" xsi:type="string">sitemap/</argument>
