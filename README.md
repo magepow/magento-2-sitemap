@@ -172,7 +172,7 @@ If this project help you reduce time to develop, you can give me a cup of coffee
 
 * [Flexon - Multipurpose Shopify Theme](https://1.envato.market/c/1314680/275988/4415?u=https://themeforest.net/item/flexon-multipurpose-shopify-theme/33461048)
 
-**[Our Shopify App](https://apps.shopify.com/partners/test-mage)**
+**[Our Shopify App](https://apps.shopify.com/partners/maggicart)**
 
 * [Magepow Size Chart](https://apps.shopify.com/magepow-size-chart)
 
