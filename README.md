@@ -61,10 +61,7 @@ Before you continue, ensure you meet the following requirements:
 ### Download Magento 2 Google Site Map
 
  #### 1. Buy it
-```
-[Buy it on Magepow](https://magepow.com/magento-2-sitemap.html)
-
-```
+  [Buy it on Magepow](https://magepow.com/magento-2-sitemap.html)
 
   ### 1.2. General configuration
 
