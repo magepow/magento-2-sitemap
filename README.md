@@ -1,3 +1,5 @@
+[<img src="https://github.com/magepow/themeforest/blob/master/shopify/shopify_affiliate.jpg" >](https://shopify.pxf.io/VyL446)
+
 ## Magento 2 Google Sitemap - Magepow Sitemap generator extension
 
 To increase visibility in search engines, your website needs to be crawled quickly. Sitemaps are one of the tools to achieve this goal.
